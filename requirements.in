@@ -1,0 +1,4 @@
+pip-tools>=6.9
+pywin32>=304
+colorama>=0.4.6
+psutil>=5.9.3
