@@ -70,6 +70,7 @@ check_list_packages = [
     "com.google.android.apps.youtube.music",
     "com.google.android.apps.docs",
     "com.google.android.apps.maps",
+    "com.google.android.apps.safetyhub"
     "com.google.android.gms.location.history",
     "com.google.android.apps.subscriptions.red",
     "com.google.android.apps.tachyon",

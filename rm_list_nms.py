@@ -70,6 +70,7 @@ check_list_names = [
     "YouTube Music",
     "Google Docs",
     "Google Maps",
+    "Google Personal Safety",
     "Google Location History",
     "Google One",
     "Google Meet",
