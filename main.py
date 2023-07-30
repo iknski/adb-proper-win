@@ -11,6 +11,10 @@ work_directory = None
 if work_directory is None:
     work_directory = []
 
+list_to_remove = None
+if list_to_remove is None:
+    list_to_remove = []
+
 
 def _hello():
     hello = [
@@ -26,23 +30,19 @@ def _hello():
         sleep(1)
 
 
+def _create():
+    wd_ini_file = open("work_directory.ini", mode="a", encoding="UTF-8")
+    wd_ini_file.close()
+    rm_list_file = open("list_to_remove.txt", mode="a", encoding="UTF-8")
+    rm_list_file.close()
+    rm_ini_file = open("removed_apps.ini", mode="a", encoding="UTF-8")
+    rm_ini_file.close()
+
+
 def _version():
     with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
         work_directory = wd_ini_file.readline().strip()
     call([work_directory, "version"])
-
-
-def phone_check():
-    with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
-        work_directory = wd_ini_file.readline().strip()
-
-    proc = Popen([work_directory, "shell", "exit"], shell=False, stderr=PIPE)
-    output = proc.stderr.read()
-    if output == b"adb.exe: no devices/emulators found\r\n":
-        print(f"Device is not connected!")
-        proc.terminate()
-        input("Press Enter to exit...")
-        exit(Fore.RED + f"Script is closed!")
 
 
 def _device_id():
@@ -68,6 +68,19 @@ def _device_id():
     output.terminate()
 
 
+def phone_check():
+    with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
+        work_directory = wd_ini_file.readline().strip()
+
+    proc = Popen([work_directory, "shell", "exit"], shell=False, stderr=PIPE)
+    output = proc.stderr.read()
+    if output == b"adb.exe: no devices/emulators found\r\n":
+        print(f"Device is not connected!")
+        proc.terminate()
+        input("Press Enter to exit...")
+        exit(Fore.RED + f"Script is closed!")
+
+
 def adb_terminate():
     for proc in process_iter():
         name = proc.name()
@@ -77,6 +90,7 @@ def adb_terminate():
 
 def main():
     if not path.isfile("work_directory.ini") or stat("work_directory.ini").st_size == 0:
+        _create()
         _hello()
 
         import adb_search
@@ -104,8 +118,11 @@ def main():
 
 
 if __name__ == "__main__":
-    print(Fore.BLUE + f"version 1.1 stable")
-    print(Fore.BLUE + f">> refactoring and code optimization...")
+    print(Fore.BLUE + f"version 1.2 stable")
+    print(
+        Fore.BLUE
+        + f">> added the ability to delete applications through the list_to_remove.txt ..."
+    )
     print(f"-------------------------")
     main()
     adb_terminate()
