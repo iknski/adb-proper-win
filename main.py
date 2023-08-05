@@ -3,6 +3,7 @@ from subprocess import call, Popen, PIPE
 from time import sleep
 from colorama import init, Fore
 from psutil import process_iter
+from art import tprint
 
 
 init(autoreset=True)
@@ -118,11 +119,13 @@ def main():
 
 
 if __name__ == "__main__":
-    print(Fore.BLUE + f"version 1.2 stable")
+    tprint("ADB-Proper")
+    print(Fore.BLUE + f"version 1.21 stable")
     print(
         Fore.BLUE
         + f">> added the ability to delete applications through the list_to_remove.txt ..."
     )
+    print(Fore.BLUE + f">> added art - ADB-Proper title ...")
     print(f"-------------------------")
     main()
     adb_terminate()
