@@ -79,7 +79,6 @@ while True:
 input("Press Enter to confirm...")
 print(f"-------------------------")
 
-print(pkgs_to_enable)
 for iter in pkgs_to_enable:
     cmd_enbl = f"{work_directory} -d shell pm enable --user 0 {iter}"
     enable = split(cmd_enbl)

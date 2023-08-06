@@ -120,12 +120,14 @@ def main():
 
 if __name__ == "__main__":
     tprint("ADB-Proper")
-    print(Fore.BLUE + f"version 1.21 stable")
+    print(Fore.BLUE + f"version 1.22 experimental")
     print(
         Fore.BLUE
         + f">> added the ability to delete applications through the list_to_remove.txt ..."
     )
     print(Fore.BLUE + f">> added art - ADB-Proper title ...")
+    print(Fore.BLUE + f">> new menu to chose options and apps (experimental)...")
+    print(Fore.BLUE + f">> so far only to uninstall apps...")
     print(f"-------------------------")
     main()
     adb_terminate()
