@@ -5,6 +5,7 @@ from comparing_positions import compare_position
 from shlex import split
 from main import phone_check
 from colorama import init, Fore
+from pick import pick
 
 
 init(autoreset=True)
@@ -19,6 +20,9 @@ with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
 
 phone_check()
 
+"""
+находим отключенные пакеты
+"""
 proc = Popen(work_directory + " shell pm list packages -d", shell=False, stdout=PIPE)
 
 with proc.stdout:
@@ -26,59 +30,65 @@ with proc.stdout:
         disabled_packages.append(line.decode().strip()[8:])
 proc.terminate()
 
-print(f"-------------------------")
-print(f"Disabled apps: ")
-print(f"-------------------------")
+"""
+формируем список имён пакетов - понадобится для лучшего понимания, что мы будем удалять
+"""
+disabled_nm = compare_position(disabled_packages)
+
+"""
+добавляем имена к пакетам для удобства
+"""
+disabled_full = list()
 index = 0
-for iter in disabled_packages:
-    if iter not in check_list_packages:
-        print(f"{index + 1}) Package: {Fore.GREEN + iter}")
-    elif iter in check_list_packages:
-        print(
-            f"{index + 1}) Name: {Fore.YELLOW + compare_position(disabled_packages)[index - 1]} {Fore.RESET}Package: {Fore.GREEN + iter}"
-        )
+for iter in disabled_nm:
+    disabled_full.append(f"{disabled_packages[index]} ({disabled_nm[index]})")
     index = index + 1
 
-while True:
-    try:
-        if len(disabled_packages) == 0:
-            exit(Fore.GREEN + f"All apps enabled...")
-        print(f"-------------------------")
-        input_nums = findall(
-            "[\da]+",
-            input(
-                f"Enter the app numbers you want to enable separate by space\n"
-                f"-------------------------\n"
-                f"Or type 'a' to select all apps: "
-            ),
-        )
-        print(f"-------------------------")
-        print(f"Your choice: ")
-        pkgs_to_enable = list()
-        nms_to_enable = list()
-        for iter in input_nums:
-            if input_nums[0] == "a":
-                print(f"Selected: " + Fore.RED + "All Apps!!!")
-                pkgs_to_enable = disabled_packages
-                break
-            pkgs_to_enable.append(disabled_packages[int(iter) - 1])
+"""
+формируем меню для выбора приложений
+"""
+title = "Disabled apps...\nTap Space key for chose\n-------------------------"
+options = disabled_full
+selected = pick(
+    options,
+    title,
+    indicator="> ",
+    multiselect=True,
+    min_selection_count=1,
+)
 
-        for list_iter in pkgs_to_enable:
-            if list_iter not in check_list_packages:
-                print(f">> Package: {Fore.GREEN + list_iter}")
-            elif list_iter in check_list_packages:
-                print(
-                    f">> {Fore.YELLOW + compare_position(disabled_packages)[index - 1]}{Fore.RESET} - {Fore.GREEN + list_iter}"
-                )
-            index = index + 1
-        break
+print(f"Your choice: \n-------------------------")
 
-    except (ValueError, IndexError):
-        print("incorrect input, try again...")
+"""
+формируем список для включения
+отрезаем лишнее из элементов списка, иначе будет ошибка
+для ADB нам нужно лишь имя пакета
+"""
+pkgs_to_enable = list()
+for iter in selected:
+    if "(" in iter[0]:
+        pkgs_to_enable.append(iter[0].split(" (")[0])
 
-input("Press Enter to confirm...")
+"""
+часть ниже нужна лишь для того чтобы увидеть что мы будем удалять перед подтверждением
+"""
+_list = list()
+for list in selected:
+    for iter in list:
+        _list.append(iter)
+        selected_pkgs = _list[0::2]
+
+index = 0
+for iter in selected_pkgs:
+    out = f"{index + 1}) {iter}"
+    index = index + 1
+    print(out)
 print(f"-------------------------")
+input("Press Enter to confirm...")
 
+"""
+погнали...
+"""
 for iter in pkgs_to_enable:
     cmd_enbl = f"{work_directory} -d shell pm enable --user 0 {iter}"
     enable = split(cmd_enbl)
