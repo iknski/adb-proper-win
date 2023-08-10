@@ -14,7 +14,11 @@ with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
 phone_check()
 
 if stat("list_to_remove.txt").st_size == 0:
-    print(Fore.RED + f"list_to_remove.txt is empty, please fill it and try again...")
+    print(
+        f"-------------------------\n"
+        f"{Fore.RED}list_to_remove.txt is empty, please fill it and try again...\n"
+        f"{Fore.RESET}-------------------------"
+        )
     adb_terminate()
 
 with open("list_to_remove.txt", mode="r", encoding="UTF-8") as rm_list_file:
@@ -37,7 +41,11 @@ with open("list_to_remove.txt", mode="r", encoding="UTF-8") as rm_list_file:
         if output == b"Failure [-1000]\r\n":
             Popen(disable)
         elif output == b"Failure [not installed for 0]\r\n":
-            print(Fore.GREEN + f"Bloatware package ({iter}) not found!!!")
+            print(
+                f"-------------------------\n"
+                f"{Fore.GREEN}Bloatware package ({iter}) not found!!!"
+                f"{Fore.RESET}-------------------------"
+                )
 
         elif output == b"Success\r\n":
             with open("removed_apps.ini", mode="a", encoding="UTF-8") as rm_ini_file:

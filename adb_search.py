@@ -44,8 +44,7 @@ if adb_found is None:
 for next_list in found:
     adb_found += next_list
 
-print(f"-------------------------")
-print(
-    Fore.GREEN + f"found in %.3f seconds\n"
+print(f"-------------------------\n"
+    f"{Fore.GREEN}found in %.3f seconds\n"
     f"{quantity_drives} drives scanned" % (time() - timer)
 )

@@ -5,7 +5,7 @@ from colorama import init, Fore, Back
 
 
 """
-Формируем вывод с найденными программами и их версией
+Формируем вывод c найденными программами и их версией
 """
 init(autoreset=True)
 
@@ -28,7 +28,7 @@ for x in adb_found:
 
 if len(adb_found) == 1:
     print(
-        f"-------------------------\n"
+        f"-------------------------\n",
         f"Directory selected for work: {Fore.GREEN + adb_found[0]}"
     )
     work_directory = adb_found[0]
@@ -36,8 +36,10 @@ if len(adb_found) == 1:
         wd_ini_file.write(work_directory)
 
 elif len(adb_found) >= 2:
-    print(Back.GREEN + f"Found copies of the ADB:")
-    print(f"-------------------------")
+    print(
+        f"{Back.GREEN}Found copies of the ADB:\n",
+        f"-------------------------"
+        )
     index = 0
     for x in adb_found:
         index = index + 1
@@ -45,15 +47,15 @@ elif len(adb_found) >= 2:
 
     answer_3 = int(
         input(
-            f"-------------------------\n"
-            f"Choose which one you will work with\n"
+            f"-------------------------\n",
+            f"Choose which one you will work with\n",
             f"Enter a number: >>> "
         )
     )
     for iter in range(len(adb_found)):
         if answer_3 == iter + 1:
             print(
-                f"-------------------------\n"
+                f"-------------------------\n",
                 f"Directory selected for work: {Fore.GREEN + adb_found[iter]}"
             )
             work_directory = adb_found[iter]

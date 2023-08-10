@@ -14,48 +14,56 @@ with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
     work_directory = work_directory.replace("\\", "/")
 
 phone_check()
-import app_list
+
 from app_list import installed_packages
 from rm_list_pkgs import check_list_packages
-from rm_list_nms import check_list_names
 
 """
 сравниваем списки установленных пакетов c черным списком
 """
-differences_pkg = list(filter(lambda it: it in installed_packages, check_list_packages))
+differences_packages = list(
+    filter(lambda it: it in installed_packages, check_list_packages)
+)
 
 """
 если есть отключенные пакеты удаляем их из подготаавливаемого списка
 """
-for iter in differences_pkg:
+for iter in differences_packages:
     if iter in disabled:
-        differences_pkg.remove(iter)
+        differences_packages.remove(iter)
 
 """
 формируем список имён пакетов - понадобится для лучшего понимания, что мы будем удалять
 """
-differences_nm = compare_position(differences_pkg)
+differences_names = compare_position(differences_packages)
 
 """
 если сравниваемый список пуст, это здорово
 """
-if len(differences_pkg) == 0:
-    exit(Fore.GREEN + f"Your phone is in optimal condition\nNo apps to remove...")
+if len(differences_packages) == 0:
+    exit(
+        f"{Fore.GREEN}Your phone is in optimal condition\n"
+        f"No apps to remove..."
+        )
 
 """
 добавляем имена к пакетам для удобства
 """
 differences_full = list()
 index = 0
-for iter in differences_nm:
-    differences_full.append(f"{differences_pkg[index]} ({differences_nm[index]})")
+for iter in differences_names:
+    differences_full.append(
+        f"{differences_packages[index]} ({differences_names[index]})"
+    )
     index = index + 1
 
 """
 формируем меню для выбора удаляемых приложений
 """
 title = (
-    "Application's for removing...\nTap Space key for chose\n-------------------------"
+    f"Applications to uninstall...\n"
+    f"Tap Space key for chose\n"
+    f"-------------------------"
 )
 options = differences_full
 selected = pick(
@@ -66,17 +74,21 @@ selected = pick(
     min_selection_count=1,
 )
 
-print(f"Your choice: \n-------------------------")
+print(
+    f"-------------------------\n"
+    f"Your choice:\n"
+    f"-------------------------"
+    )
 
 """
 формируем список для удаления
 отрезаем лишнее из элементов списка, иначе будет ошибка удаления
 для ADB нам нужно лишь имя пакета
 """
-pkgs_to_remove = list()
+packages_to_remove = list()
 for iter in selected:
     if "(" in iter[0]:
-        pkgs_to_remove.append(iter[0].split(" (")[0])
+        packages_to_remove.append(iter[0].split(" (")[0])
 
 """
 часть ниже нужна лишь для того чтобы увидеть что мы будем удалять перед подтверждением
@@ -92,13 +104,15 @@ for iter in selected_pkgs:
     out = f"{index + 1}) {iter}"
     index = index + 1
     print(out)
-print(f"-------------------------")
-input("Press Enter to confirm...")
+input(
+    f"-------------------------\n"
+    f"Press Enter to confirm..."
+    )
 
 """
 погнали...
 """
-for iter in pkgs_to_remove:
+for iter in packages_to_remove:
     cmd_un = f"{work_directory} -d shell pm uninstall --user 0 {iter}"
     cmd_dsbl = f"{work_directory} -d shell pm disable-user --user 0 {iter}"
     uninstall = split(cmd_un)

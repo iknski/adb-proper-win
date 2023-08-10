@@ -64,7 +64,7 @@ def _device_id():
                     f"Device connected as:\n",
                     f"{Fore.YELLOW + device}\n",
                     f"{Fore.BLUE + model}\n",
-                    Fore.GREEN + f"serial:{sn}",
+                    Fore.GREEN + f"serial:{sn}"
                 )
     output.terminate()
 
@@ -76,10 +76,10 @@ def phone_check():
     proc = Popen([work_directory, "shell", "exit"], shell=False, stderr=PIPE)
     output = proc.stderr.read()
     if output == b"adb.exe: no devices/emulators found\r\n":
-        print(f"Device is not connected!")
+        print(f"{Fore.RED}Device is not connected!")
         proc.terminate()
         input("Press Enter to exit...")
-        exit(Fore.RED + f"Script is closed!")
+        exit(f"{Fore.RED}Script is closed!")
 
 
 def adb_terminate():
@@ -106,6 +106,7 @@ def main():
             _version()
             print(f"-------------------------")
             _device_id()
+            print(f"-------------------------")
             import user_choice
 
     else:
@@ -120,14 +121,12 @@ def main():
 
 if __name__ == "__main__":
     tprint("ADB-Proper")
-    print(Fore.BLUE + f"version 1.23 experimental")
+    print(f"{Fore.BLUE}version 1.25 experimental")
     print(
-        Fore.BLUE
-        + f">> added the ability to delete applications through the list_to_remove.txt ..."
+        f"{Fore.BLUE}>> added the ability to delete applications through the list_to_remove.txt ..."
     )
-    print(Fore.BLUE + f">> new menu to chose options and apps (experimental)...")
-    print(Fore.BLUE + f">> new menu for enable apps...")
-    print(Fore.BLUE + f">> coming soon to reinstall apps...")
+    print(f"{Fore.BLUE}>> new menu to chose options and apps (experimental)...")
+    print(f"{Fore.BLUE}>> refactoring code...")
     print(f"-------------------------")
     main()
     adb_terminate()
