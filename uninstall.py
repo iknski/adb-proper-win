@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 from comparing_positions import compare_position
 from shlex import split
-from main import phone_check
+from main import phone_check, menu
 from app_list import disabled
 from colorama import init, Fore
 from pick import pick
@@ -62,7 +62,8 @@ for iter in differences_names:
 """
 title = (
     f"Applications to uninstall...\n"
-    f"Tap Space key for chose\n"
+    f"Tap \"Space\" key for chose\n"
+    f"Or tap \"Q\" key for exit\n"
     f"-------------------------"
 )
 options = differences_full

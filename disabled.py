@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 from comparing_positions import compare_position
 from shlex import split
-from main import phone_check
+from main import phone_check, menu
 from colorama import init, Fore
 from pick import pick
 
@@ -57,7 +57,8 @@ else:
     """
     title = (
         f"Disabled apps...\n"
-        f"Tap Space key for chose\n"
+        f"Tap \"Space\" key for chose\n"
+        f"Or tap \"Q\" key for exit\n"
         f"-------------------------"
         )
     options = disabled_full

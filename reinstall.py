@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 from comparing_positions import compare_position
 from shlex import split
-from main import phone_check
+from main import phone_check, menu
 from colorama import init, Fore
 from pick import pick
 
@@ -52,7 +52,8 @@ else:
     """
     title = (
         f"Deleted apps...\n"
-        f"Tap Space key for chose\n"
+        f"Tap \"Space\" key for chose\n"
+        f"Or tap \"Q\" key for exit\n"
         f"-------------------------"
         )
     options = deleted_full
@@ -69,7 +70,7 @@ else:
         f"Your choice:\n"
         f"-------------------------"
         )
-    
+
     """
     формируем список для включения
     отрезаем лишнее из элементов списка, иначе будет ошибка
@@ -79,7 +80,7 @@ else:
     for iter in selected:
         if "(" in iter[0]:
             packages_to_reinstall.append(iter[0].split(" (")[0])
-    
+
     """
     часть ниже нужна лишь для того чтобы увидеть что мы будем удалять перед подтверждением
     """
@@ -88,7 +89,7 @@ else:
         for iter in list:
             _list.append(iter)
             selected_packages = _list[0::2]
-    
+
     index = 0
     for iter in selected_packages:
         out = f"{index + 1}) {iter}"
@@ -98,7 +99,7 @@ else:
         f"-------------------------\n"
         f"Press Enter to confirm..."
         )
-    
+
     for iter in packages_to_reinstall:
         cmd_re = f"{work_directory} -d shell cmd package install-existing {iter}"
         reinstall = split(cmd_re)
@@ -106,7 +107,7 @@ else:
         output = proc.stdout.read()
         print(f"{output.decode()}")
         proc.terminate()
-    
+
         with open("removed_apps.ini", mode="r", encoding="UTF-8") as rm_ini_file:
             lines = rm_ini_file.readlines()
         with open("removed_apps.ini", mode="w", encoding="UTF-8") as rm_ini_file:

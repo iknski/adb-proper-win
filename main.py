@@ -4,6 +4,7 @@ from time import sleep
 from colorama import init, Fore
 from psutil import process_iter
 from art import tprint
+from pick import pick
 
 
 init(autoreset=True)
@@ -68,6 +69,41 @@ def _device_id():
                 )
     output.terminate()
 
+def menu():
+    with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
+        work_directory = wd_ini_file.readline().strip()
+        work_directory = work_directory.replace("\\", "/")
+    title = (
+        f"Choose your option:\n"
+        f"-------------------------"
+        )
+    options = [
+        "To execute commands manually",
+        "To uninstall apps manually",
+        "To uninstall apps via list_to_remove.txt",
+        "To reinstall deleted apps",
+        "To enable disabled apps",
+        "To close and exit",
+    ]
+    option, index = pick(options, title, indicator="> ")
+    match index:
+        case 0:
+            phone_check()
+            print(
+                f"To finish enter: " + Fore.RED + "exit\n",
+                f"-------------------------"
+                )
+            call([work_directory, "shell"])
+        case 1:
+            import uninstall
+        case 2:
+            import list_remover
+        case 3:
+            import reinstall
+        case 4:
+            import disabled
+        case 5:
+            print(f"{Fore.RED}Script is closed!")
 
 def phone_check():
     with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
@@ -76,7 +112,10 @@ def phone_check():
     proc = Popen([work_directory, "shell", "exit"], shell=False, stderr=PIPE)
     output = proc.stderr.read()
     if output == b"adb.exe: no devices/emulators found\r\n":
-        print(f"{Fore.RED}Device is not connected!")
+        print(
+            f"{Fore.RED}Device is not connected!\n"
+            f"{Fore.RED}Or not enabled usb-debugging!"
+            )
         proc.terminate()
         input("Press Enter to exit...")
         exit(f"{Fore.RED}Script is closed!")
@@ -107,7 +146,7 @@ def main():
             print(f"-------------------------")
             _device_id()
             print(f"-------------------------")
-            import user_choice
+            menu()
 
     else:
         with open("work_directory.ini", mode="r", encoding="UTF-8") as wd_ini_file:
@@ -116,16 +155,12 @@ def main():
         _version()
         print(f"-------------------------")
         _device_id()
-        import user_choice
+        menu()
 
 
 if __name__ == "__main__":
     tprint("ADB-Proper")
-    print(f"{Fore.BLUE}version 1.25 experimental")
-    print(
-        f"{Fore.BLUE}>> added the ability to delete applications through the list_to_remove.txt ..."
-    )
-    print(f"{Fore.BLUE}>> new menu to chose options and apps (experimental)...")
+    print(f"{Fore.BLUE}version 1.26 stable")
     print(f"{Fore.BLUE}>> refactoring code...")
     print(f"-------------------------")
     main()
